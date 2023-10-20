@@ -24,8 +24,7 @@ const closeModal2 = () => isOpen2.value = false
             @closeModal="closeModal"
             :title="'This is my modal - draggable'"
             draggable
-            :width="350"
-            :top="200">
+            resizable>
     <p>
       Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores itaque
       inventore dignissimos suscipit delectus, ipsa repellat minima et vitae
@@ -40,17 +39,20 @@ const closeModal2 = () => isOpen2.value = false
   <AppModal v-if="isOpen2"
             @closeModal="closeModal2"
             draggable
-            :title="'It is panel 2'"
             :width="550"
             :top="400">
-
     <h3> You can open another modal window from here.</h3>
     <button class="button" @click="openModal()">Open Modal</button>
-
-
   </AppModal>
 
 
-  <main class="app-main">
-  </main>
+  <ul>
+    <h3>All parameters are optional:</h3>
+    <li>title</li>
+    <li>width</li>
+    <li>top</li>
+    <li>draggable</li>
+    <li>resizable</li>
+  </ul>
+
 </template>

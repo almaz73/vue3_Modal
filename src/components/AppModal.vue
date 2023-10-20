@@ -2,13 +2,14 @@
 import {computed} from "vue";
 
 interface Props {
+  title?: string,
   width?: number;
   top?: number,
-  title: string,
-  draggable?: boolean
+  draggable?: boolean,
+  resizable?: boolean
 }
 
-const {width, top, title, draggable} = defineProps<Props>()
+const {width, top, title, draggable, resizable} = defineProps<Props>()
 const emits = defineEmits(['closeModal'])
 
 const defaultWidth = 400
@@ -43,7 +44,7 @@ const mouseup = () => {
   <Teleport to="body">
     <div class="modal">
       <div class="modal__fon" @click="emits('closeModal')"></div>
-      <div class="modal__content draggable">
+      <div class="modal__content draggable" :class="{resizable}">
         <div class="modal__head"
              @mouseup="mouseup"
              @mousedown="mousedown"></div>
@@ -95,6 +96,11 @@ const mouseup = () => {
   box-shadow: 0 0 5px black;
 }
 
+.resizable {
+  resize: both;
+  overflow: auto;
+}
+
 .close_cross {
   position: absolute;
   top: 5px;
@@ -110,7 +116,7 @@ const mouseup = () => {
   background: green;
 }
 
-.modal__info{
+.modal__info {
   padding: 10px;
 }
 </style>

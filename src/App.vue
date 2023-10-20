@@ -25,7 +25,14 @@ function closeModal() {
   <AppModal v-if="isOpen"
             @closeModal="closeModal"
             :width="350"
-            :top="200"/>
+            :top="200">
+    <p>
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores itaque
+      inventore dignissimos suscipit delectus, ipsa repellat minima et vitae
+      perspiciatis quasi unde earum corporis labore at in temporibus repudiandae
+      totam
+    </p>
+  </AppModal>
 
 
   <main class="app-main">

@@ -13,51 +13,40 @@ const defaultWidth = 400
 const panelWidth = computed(() => width ? (width + 'px') : (defaultWidth + 'px'))
 const panelTop = computed(() => top != undefined ? (top + 'px') : '100px')
 const panelCenter = computed(() => (document.body.clientWidth / 2 - (width ? width : defaultWidth) / 2 - 10 + 'px'))
-let dragObject = {};
+let dragObject = {elem: null, x: 0, y: 0};
 
 function mousedown(e) {
-  // если клик правой кнопкой мыши
-  if (e.which != 1) return false;
-  var elem = e.target.closest('.draggable');
+  if (e.which != 1) return false; // если клик правой кнопкой мыши
+  let elem = e.target.closest('.draggable');
   if (!elem) return false;
-
-  // запомнить координаты, с которых начат перенос объекта
   dragObject.elem = elem
-  dragObject.downX = e.pageX;
-  dragObject.downY = e.pageY;
-  console.log('mousedown ', e)
+  dragObject.x = e.offsetX;
+  dragObject.y = e.offsetY;
 }
 
 document.onmousemove = function (e) {
   if (!dragObject.elem) return;
-
-  //console.log('...отобразить перенос элемента.... ', dragObject.elem)
+  dragObject.elem.style.left = e.pageX - dragObject.x + 'px';
+  dragObject.elem.style.top = e.pageY - dragObject.y + 'px';
 }
-
-function mousemove(e) {
-  console.log('mousemove e', e)
-}
+const mouseup = () => dragObject.elem = null
 
 
 </script>
 <template>
   <Teleport to="body">
-    <div class="modal" drop>
-      <div class="modal__phone" @click="emits('closeModal')"></div>
+    <div class="modal">
+      <div class="modal__fon" @click="emits('closeModal')"></div>
       <div class="modal__content draggable">
         <div class="modal__head"
+             @mouseup="mouseup"
              @mousedown="mousedown"></div>
         <div class="modal__title">
           <h2>This is my modal</h2>
         </div>
         <div class="close_cross" @click="emits('closeModal')">❌</div>
         <div class="modal__info">
-          <p>
-            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolores itaque
-            inventore dignissimos suscipit delectus, ipsa repellat minima et vitae
-            perspiciatis quasi unde earum corporis labore at in temporibus repudiandae
-            totam
-          </p>
+          <slot/>
         </div>
       </div>
     </div>
@@ -71,7 +60,7 @@ function mousemove(e) {
   position: fixed;
 }
 
-.modal__phone {
+.modal__fon {
   width: 100%;
   height: 100vh;
   background: black;

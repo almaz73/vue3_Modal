@@ -31,7 +31,6 @@ const closeModal2 = () => isOpen2.value = false
       perspiciatis quasi unde earum corporis labore at in temporibus repudiandae
       totam
     </p>
-
   </AppModal>
 
 

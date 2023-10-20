@@ -16,27 +16,29 @@ const defaultWidth = 400
 const panelWidth = computed(() => width ? (width + 'px') : (defaultWidth + 'px'))
 const panelTop = computed(() => top != undefined ? (top + 'px') : '100px')
 const panelCenter = computed(() => (document.body.clientWidth / 2 - (width ? width : defaultWidth) / 2 - 10 + 'px'))
-let dragObject = {elem: null, x: 0, y: 0};
+let dragObject = {elem: {}, x: 0, y: 0};
 
-function mousedown(e) {
+function mousedown(e: MouseEvent) {
   if (!draggable) return false;
   if (e.which != 1) return false; // если клик правой кнопкой мыши
-  let elem = e.target.closest('.draggable');
+  let elem = (e.target as HTMLElement).closest('.draggable');
   if (!elem) return false;
   dragObject.elem = elem
   dragObject.x = e.offsetX;
   dragObject.y = e.offsetY;
   document.onmousemove = move
+  e.preventDefault();
 }
 
-function move(e) {
+function move(e: MouseEvent) {
   if (!dragObject.elem) return;
-  dragObject.elem.style.left = e.pageX - dragObject.x + 'px';
-  dragObject.elem.style.top = e.pageY - dragObject.y + 'px';
+  (dragObject.elem as HTMLElement).style.left = e.pageX - dragObject.x + 'px';
+  (dragObject.elem as HTMLElement).style.top = e.pageY - dragObject.y + 'px';
+  e.preventDefault();
 }
 
 const mouseup = () => {
-  dragObject.elem = null
+  dragObject.elem = {}
   document.onmousemove = null
 }
 </script>

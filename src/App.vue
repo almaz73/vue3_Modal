@@ -2,17 +2,15 @@
 import AppModal from "./components/AppModal.vue";
 import {ref} from "vue";
 
-const isOpen = ref(true)
+const isOpen = ref(false)
+const isOpen2 = ref(false)
 
 
+const openModal = () => isOpen.value = true
+const closeModal = () => isOpen.value = false
+const openModal2 = () => isOpen2.value = true
+const closeModal2 = () => isOpen2.value = false
 
-function openModal() {
-  isOpen.value = true
-}
-
-function closeModal() {
-  isOpen.value = false
-}
 
 </script>
 
@@ -24,6 +22,8 @@ function closeModal() {
   <button class="button" @click="openModal()">Open Modal</button>
   <AppModal v-if="isOpen"
             @closeModal="closeModal"
+            :title="'This is my modal - draggable'"
+            draggable
             :width="350"
             :top="200">
     <p>
@@ -32,6 +32,22 @@ function closeModal() {
       perspiciatis quasi unde earum corporis labore at in temporibus repudiandae
       totam
     </p>
+
+  </AppModal>
+
+
+  <button class="button" @click="openModal2()">Open Modal 2</button>
+  <AppModal v-if="isOpen2"
+            @closeModal="closeModal2"
+            draggable
+            :title="'It is panel 2'"
+            :width="550"
+            :top="400">
+
+    <h3> You can open another modal window from here.</h3>
+    <button class="button" @click="openModal()">Open Modal</button>
+
+
   </AppModal>
 
 

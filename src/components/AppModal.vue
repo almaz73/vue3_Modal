@@ -3,10 +3,12 @@ import {computed} from "vue";
 
 interface Props {
   width?: number;
-  top?: number
+  top?: number,
+  title: string,
+  draggable?: boolean
 }
 
-const {width, top} = defineProps<Props>()
+const {width, top, title, draggable} = defineProps<Props>()
 const emits = defineEmits(['closeModal'])
 
 const defaultWidth = 400
@@ -16,22 +18,26 @@ const panelCenter = computed(() => (document.body.clientWidth / 2 - (width ? wid
 let dragObject = {elem: null, x: 0, y: 0};
 
 function mousedown(e) {
+  if (!draggable) return false;
   if (e.which != 1) return false; // если клик правой кнопкой мыши
   let elem = e.target.closest('.draggable');
   if (!elem) return false;
   dragObject.elem = elem
   dragObject.x = e.offsetX;
   dragObject.y = e.offsetY;
+  document.onmousemove = move
 }
 
-document.onmousemove = function (e) {
+function move(e) {
   if (!dragObject.elem) return;
   dragObject.elem.style.left = e.pageX - dragObject.x + 'px';
   dragObject.elem.style.top = e.pageY - dragObject.y + 'px';
 }
-const mouseup = () => dragObject.elem = null
 
-
+const mouseup = () => {
+  dragObject.elem = null
+  document.onmousemove = null
+}
 </script>
 <template>
   <Teleport to="body">
@@ -42,7 +48,7 @@ const mouseup = () => dragObject.elem = null
              @mouseup="mouseup"
              @mousedown="mousedown"></div>
         <div class="modal__title">
-          <h2>This is my modal</h2>
+          <h2>{{ title }}</h2>
         </div>
         <div class="close_cross" @click="emits('closeModal')">❌</div>
         <div class="modal__info">
@@ -52,7 +58,7 @@ const mouseup = () => dragObject.elem = null
     </div>
   </Teleport>
 </template>
-<style>
+<style scoped>
 .modal {
   top: 0;
   width: 100%;
@@ -80,7 +86,7 @@ const mouseup = () => dragObject.elem = null
 
 .modal__content {
   position: absolute;
-  background: pink;
+  background: white;
   width: v-bind(panelWidth);
   top: v-bind(panelTop);
   left: v-bind(panelCenter);
@@ -97,10 +103,14 @@ const mouseup = () => dragObject.elem = null
 }
 
 .modal__title {
-  background: blue;
+  background: orange;
 }
 
 .modal__info {
   background: green;
+}
+
+.modal__info{
+  padding: 10px;
 }
 </style>
